@@ -75,8 +75,8 @@ task-manager/
 
 ### 1. Clone or Download the Repository
 ```bash
-git clone <your-repository-url>
-cd "Mini Task Manager"
+git clone https://github.com/NandiniY018/mini-task-manager.git
+cd mini-task-manager
 ```
 
 ### 2. Create and Activate a Virtual Environment
