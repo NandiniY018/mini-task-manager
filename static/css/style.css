@@ -1,0 +1,577 @@
+/*
+=============================================================
+  style.css  –  Mini Task Manager
+  Plain CSS only. No frameworks.
+  Design: clean, professional, responsive.
+=============================================================
+*/
+
+/* =============================================
+   1. CSS Custom Properties (Variables)
+   Centralising colours and spacing makes it
+   easy to change the theme in one place.
+============================================= */
+:root {
+    --color-bg:          #f0f2f5;
+    --color-surface:     #ffffff;
+    --color-primary:     #2563eb;   /* Blue */
+    --color-primary-dk:  #1d4ed8;
+    --color-success:     #16a34a;   /* Green */
+    --color-danger:      #dc2626;   /* Red */
+    --color-warning:     #d97706;   /* Amber */
+    --color-text:        #1e293b;
+    --color-text-muted:  #64748b;
+    --color-border:      #e2e8f0;
+    --color-overdue:     #fef2f2;   /* Light red background for overdue tasks */
+    --color-overdue-bd:  #fecaca;
+    --color-done-bg:     #f0fdf4;   /* Light green for done tasks */
+
+    --radius-sm:  6px;
+    --radius-md:  10px;
+    --radius-lg:  16px;
+
+    --shadow-sm:  0 1px 3px rgba(0,0,0,0.08);
+    --shadow-md:  0 4px 12px rgba(0,0,0,0.10);
+    --shadow-lg:  0 8px 30px rgba(0,0,0,0.15);
+
+    --font-sans: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    --transition: 0.2s ease;
+}
+
+/* =============================================
+   2. Reset & Base
+============================================= */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+    font-family: var(--font-sans);
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* =============================================
+   3. Header
+============================================= */
+.app-header {
+    background: linear-gradient(135deg, #1e40af 0%, #2563eb 60%, #3b82f6 100%);
+    color: #fff;
+    padding: 24px 0;
+    box-shadow: var(--shadow-md);
+}
+
+.header-content {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.app-title {
+    font-size: 1.9rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.app-subtitle {
+    font-size: 0.9rem;
+    opacity: 0.80;
+    margin-top: 2px;
+}
+
+/* =============================================
+   4. Main Container
+============================================= */
+.main-container {
+    max-width: 1100px;
+    margin: 32px auto;
+    padding: 0 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* =============================================
+   5. Stats Bar
+============================================= */
+.stats-bar {
+    display: flex;
+    gap: 16px;
+}
+
+.stat-card {
+    background: var(--color-surface);
+    border-radius: var(--radius-md);
+    padding: 18px 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 140px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-border);
+}
+
+.stat-number {
+    font-size: 2.4rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.pending-stat .stat-number { color: var(--color-warning); }
+.total-stat   .stat-number { color: var(--color-primary); }
+
+/* =============================================
+   6. Notification
+============================================= */
+.notification {
+    padding: 14px 20px;
+    border-radius: var(--radius-sm);
+    font-size: 0.95rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: slideDown 0.25s ease;
+}
+
+.notification.success {
+    background: #dcfce7;
+    color: #15803d;
+    border: 1px solid #bbf7d0;
+}
+
+.notification.error {
+    background: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+}
+
+.hidden { display: none !important; }
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* =============================================
+   7. Cards / Section Panels
+============================================= */
+.form-section,
+.tasks-section {
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-border);
+}
+
+.section-heading {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: 20px;
+}
+
+/* =============================================
+   8. Form
+============================================= */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* Make description and title span full width */
+.form-group--wide {
+    grid-column: 1 / -1;
+}
+
+label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.required { color: var(--color-danger); margin-left: 2px; }
+.optional  { color: var(--color-text-muted); font-weight: 400; font-size: 0.8rem; }
+
+input[type="text"],
+input[type="date"],
+textarea,
+select {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-size: 0.95rem;
+    font-family: inherit;
+    color: var(--color-text);
+    background: #fff;
+    transition: border-color var(--transition), box-shadow var(--transition);
+    outline: none;
+}
+
+input[type="text"]:focus,
+input[type="date"]:focus,
+textarea:focus,
+select:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+}
+
+textarea { resize: vertical; min-height: 60px; }
+
+.char-counter {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    text-align: right;
+}
+
+/* =============================================
+   9. Buttons
+============================================= */
+.form-actions {
+    margin-top: 20px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 10px 22px;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background var(--transition), transform var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn:active { transform: scale(0.97); }
+
+.btn-primary {
+    background: var(--color-primary);
+    color: #fff;
+}
+.btn-primary:hover { background: var(--color-primary-dk); }
+
+.btn-secondary {
+    background: #f1f5f9;
+    color: var(--color-text-muted);
+    border: 1.5px solid var(--color-border);
+}
+.btn-secondary:hover { background: #e2e8f0; }
+
+.btn-success {
+    background: var(--color-success);
+    color: #fff;
+    padding: 6px 14px;
+    font-size: 0.82rem;
+}
+.btn-success:hover { background: #15803d; }
+
+.btn-danger {
+    background: var(--color-danger);
+    color: #fff;
+    padding: 6px 14px;
+    font-size: 0.82rem;
+}
+.btn-danger:hover { background: #b91c1c; }
+
+.btn-edit {
+    background: #f59e0b;
+    color: #fff;
+    padding: 6px 14px;
+    font-size: 0.82rem;
+}
+.btn-edit:hover { background: #d97706; }
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* =============================================
+   10. Filter Bar
+============================================= */
+.tasks-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.filter-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    white-space: nowrap;
+}
+
+.filter-buttons {
+    display: flex;
+    gap: 4px;
+}
+
+.filter-btn {
+    padding: 6px 16px;
+    border: 1.5px solid var(--color-border);
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    background: #fff;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    transition: all var(--transition);
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+    background: var(--color-primary);
+    color: #fff;
+    border-color: var(--color-primary);
+}
+
+.filter-select {
+    padding: 6px 10px;
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    background: #fff;
+    color: var(--color-text);
+    cursor: pointer;
+}
+
+/* =============================================
+   11. Task Table
+============================================= */
+.table-wrapper {
+    overflow-x: auto;    /* Horizontal scroll on small screens */
+}
+
+.task-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.task-table th {
+    background: #f8fafc;
+    color: var(--color-text-muted);
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 2px solid var(--color-border);
+    white-space: nowrap;
+}
+
+.task-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--color-border);
+    vertical-align: middle;
+}
+
+.task-table tr:last-child td { border-bottom: none; }
+
+/* Row hover effect */
+.task-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+/* Done row styling */
+.task-table tr.row-done {
+    background: var(--color-done-bg);
+    opacity: 0.75;
+}
+
+.task-table tr.row-done td {
+    text-decoration: line-through;
+    color: var(--color-text-muted);
+}
+
+/* Overdue row – highlight in red if past due and not Done */
+.task-table tr.row-overdue {
+    background: var(--color-overdue);
+    border-left: 4px solid var(--color-danger);
+}
+
+.task-table tr.row-overdue td:first-child {
+    padding-left: 12px;   /* compensate for border-left */
+}
+
+/* Title cell */
+.task-title { font-weight: 600; }
+
+/* Actions cell */
+.actions-col { width: 220px; }
+
+.action-buttons {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+/* =============================================
+   12. Priority & Status Badges
+============================================= */
+.badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: capitalize;
+    white-space: nowrap;
+}
+
+/* Priority badges */
+.badge-high    { background: #fee2e2; color: #b91c1c; }
+.badge-medium  { background: #fef9c3; color: #92400e; }
+.badge-low     { background: #dcfce7; color: #15803d; }
+
+/* Status badges */
+.badge-pending { background: #fff7ed; color: #c2410c; }
+.badge-done    { background: #dcfce7; color: #15803d; }
+
+/* =============================================
+   13. Empty & Loading states
+============================================= */
+.empty-message {
+    text-align: center;
+    padding: 40px 0;
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+}
+
+.loading-indicator {
+    text-align: center;
+    padding: 20px;
+    color: var(--color-text-muted);
+    font-style: italic;
+}
+
+/* =============================================
+   14. Edit Modal
+============================================= */
+.modal-overlay {
+    position: fixed;
+    inset: 0;                /* top/right/bottom/left = 0 */
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.modal-box {
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    width: 100%;
+    max-width: 540px;
+    box-shadow: var(--shadow-lg);
+    animation: modalIn 0.2s ease;
+}
+
+@keyframes modalIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.modal-header h3 { font-size: 1.1rem; font-weight: 600; }
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+    color: var(--color-text-muted);
+    padding: 4px;
+    border-radius: 4px;
+}
+.modal-close:hover { background: #f1f5f9; }
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+}
+
+/* =============================================
+   15. Responsive Design
+   Mobile-first approach: adjust layout on small screens
+============================================= */
+@media (max-width: 768px) {
+    .app-title { font-size: 1.5rem; }
+
+    .main-container { margin: 16px auto; padding: 0 16px; gap: 16px; }
+
+    .form-grid { grid-template-columns: 1fr; }
+    .form-group--wide { grid-column: 1; }
+
+    .tasks-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .filter-bar { gap: 8px; }
+
+    .form-row { grid-template-columns: 1fr; }
+
+    .actions-col { width: auto; }
+
+    .stat-card { min-width: 100px; padding: 14px 18px; }
+    .stat-number { font-size: 1.8rem; }
+}
+
+@media (max-width: 480px) {
+    .form-actions { flex-direction: column; }
+    .btn { width: 100%; justify-content: center; }
+
+    .filter-buttons { flex-wrap: wrap; }
+}
+

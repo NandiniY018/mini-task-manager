@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mini Task Manager – Florix Technologies</title>
+
+    <!-- Django serves CSS from static files -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+</head>
+<body>
+
+    <!-- ============================================================
+         APP HEADER
+    ============================================================ -->
+    <header class="app-header">
+        <div class="header-content">
+            <h1 class="app-title">📋 Mini Task Manager</h1>
+            <p class="app-subtitle">Florix Technologies – Intern Assessment</p>
+        </div>
+    </header>
+
+    <main class="main-container">
+
+        <!-- ============================================================
+             STATS BAR – Pending task count
+        ============================================================ -->
+        <section class="stats-bar" aria-label="Task statistics">
+            <div class="stat-card pending-stat">
+                <span class="stat-number" id="pending-count">0</span>
+                <span class="stat-label">Pending Tasks</span>
+            </div>
+            <div class="stat-card total-stat">
+                <span class="stat-number" id="total-count">0</span>
+                <span class="stat-label">Total Tasks</span>
+            </div>
+        </section>
+
+        <!-- ============================================================
+             NOTIFICATION AREA – success and error messages
+        ============================================================ -->
+        <div id="notification" class="notification hidden" role="alert" aria-live="polite"></div>
+
+        <!-- ============================================================
+             ADD TASK FORM
+        ============================================================ -->
+        <section class="form-section" aria-labelledby="form-heading">
+            <h2 id="form-heading" class="section-heading">Add New Task</h2>
+
+            <form id="task-form" novalidate>
+                <div class="form-grid">
+
+                    <!-- Title input -->
+                    <div class="form-group form-group--wide">
+                        <label for="title">Title <span class="required">*</span></label>
+                        <input
+                            type="text"
+                            id="title"
+                            name="title"
+                            placeholder="Enter task title (max 100 characters)"
+                            maxlength="100"
+                            required
+                            autocomplete="off"
+                        />
+                        <span class="char-counter" id="title-counter">0 / 100</span>
+                    </div>
+
+                    <!-- Priority dropdown -->
+                    <div class="form-group">
+                        <label for="priority">Priority <span class="required">*</span></label>
+                        <select id="priority" name="priority" required>
+                            <option value="">Select priority</option>
+                            <option value="Low">🟢 Low</option>
+                            <option value="Medium" selected>🟡 Medium</option>
+                            <option value="High">🔴 High</option>
+                        </select>
+                    </div>
+
+                    <!-- Due Date input -->
+                    <div class="form-group">
+                        <label for="due_date">Due Date <span class="required">*</span></label>
+                        <input
+                            type="date"
+                            id="due_date"
+                            name="due_date"
+                            required
+                        />
+                    </div>
+
+                    <!-- Description (optional) -->
+                    <div class="form-group form-group--wide">
+                        <label for="description">Description <span class="optional">(optional)</span></label>
+                        <textarea
+                            id="description"
+                            name="description"
+                            placeholder="Enter task description..."
+                            rows="2"
+                        ></textarea>
+                    </div>
+
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary" id="submit-btn">
+                        ➕ Add Task
+                    </button>
+                    <button type="button" class="btn btn-secondary" id="clear-btn">
+                        🗑 Clear Form
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- ============================================================
+             TASK LIST SECTION
+        ============================================================ -->
+        <section class="tasks-section" aria-labelledby="tasks-heading">
+            <div class="tasks-header">
+                <h2 id="tasks-heading" class="section-heading">Task List</h2>
+
+                <!-- Filter controls -->
+                <div class="filter-bar" role="group" aria-label="Filter tasks">
+                    <label for="status-filter" class="filter-label">Filter by Status:</label>
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" data-status="">All</button>
+                        <button class="filter-btn" data-status="Pending">Pending</button>
+                        <button class="filter-btn" data-status="Done">Done</button>
+                    </div>
+
+                    <label for="priority-filter" class="filter-label">Priority:</label>
+                    <select id="priority-filter" class="filter-select">
+                        <option value="">All Priorities</option>
+                        <option value="High">High</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Low">Low</option>
+                    </select>
+
+                    <!-- Sort control -->
+                    <label for="sort-select" class="filter-label">Sort by:</label>
+                    <select id="sort-select" class="filter-select">
+                        <option value="created_at">Newest First</option>
+                        <option value="due_date">Due Date</option>
+                        <option value="priority">Priority</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Loading indicator -->
+            <div id="loading" class="loading-indicator hidden">Loading tasks…</div>
+
+            <!-- Task table wrapper for horizontal scroll on small screens -->
+            <div class="table-wrapper">
+                <table class="task-table" id="task-table" aria-label="Tasks">
+                    <thead>
+                        <tr>
+                            <th scope="col">Title</th>
+                            <th scope="col">Priority</th>
+                            <th scope="col">Due Date</th>
+                            <th scope="col">Status</th>
+                            <th scope="col" class="actions-col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="task-tbody">
+                        <!-- Rows are injected by JavaScript -->
+                        <tr id="empty-row">
+                            <td colspan="5" class="empty-message">
+                                No tasks found. Add your first task above! 🎯
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ============================================================
+         EDIT MODAL – pops up when user clicks Edit button
+    ============================================================ -->
+    <div id="edit-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3 id="modal-title">Edit Task</h3>
+                <button class="modal-close" id="modal-close-btn" aria-label="Close modal">✕</button>
+            </div>
+
+            <form id="edit-form" novalidate>
+                <input type="hidden" id="edit-task-id" />
+
+                <div class="form-group">
+                    <label for="edit-title">Title <span class="required">*</span></label>
+                    <input type="text" id="edit-title" maxlength="100" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="edit-description">Description</label>
+                    <textarea id="edit-description" rows="2"></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="edit-priority">Priority <span class="required">*</span></label>
+                        <select id="edit-priority" required>
+                            <option value="Low">🟢 Low</option>
+                            <option value="Medium">🟡 Medium</option>
+                            <option value="High">🔴 High</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit-due-date">Due Date <span class="required">*</span></label>
+                        <input type="date" id="edit-due-date" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit-status">Status</label>
+                        <select id="edit-status">
+                            <option value="Pending">Pending</option>
+                            <option value="Done">Done</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">💾 Save Changes</button>
+                    <button type="button" class="btn btn-secondary" id="cancel-edit-btn">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!--
+        JavaScript file is loaded at the bottom so the HTML is ready
+        before the script tries to find elements on the page.
+    -->
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>
+

@@ -1,0 +1,28 @@
+# .gitignore
+# Tells Git to ignore these files when uploading to GitHub.
+# Never upload: virtual environments, database files, or Python cache.
+
+# Virtual environment folder
+venv/
+env/
+.env/
+
+# Django SQLite database (contains real data – not for version control)
+db.sqlite3
+
+# Python cache files (auto-generated, not needed in source control)
+__pycache__/
+*.py[cod]
+*.pyc
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE settings
+.vscode/
+.idea/
+
+# Static files collected for production (not needed for development)
+staticfiles/
+

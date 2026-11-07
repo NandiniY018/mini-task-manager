@@ -1,0 +1,3 @@
+@echo off
+echo Starting Mini Task Manager using virtual environment (venv)...
+".\venv\Scripts\python.exe" manage.py runserver
