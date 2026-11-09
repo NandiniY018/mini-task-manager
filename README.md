@@ -1,4 +1,4 @@
-# 📋 Mini Task Manager
+#  Mini Task Manager
 
 A clean, responsive, full-stack Task Management web application built with **Django** (Python) and **Vanilla JavaScript / HTML / CSS**, backed by **SQLite**.
 
@@ -6,7 +6,7 @@ Created as part of the **Software Developer Intern Practical Assessment** for **
 
 ---
 
-## 🛠️ Technologies Used
+##  Technologies Used
 
 - **Backend**: Python 3, Django 5.x (using plain Django Views and `JsonResponse`)
 - **Database**: SQLite3 (default Django file-based database)
@@ -14,7 +14,7 @@ Created as part of the **Software Developer Intern Practical Assessment** for **
 
 ---
 
-## ✨ Features
+##  Features
 
 - **Automatic Task Loading**: Tasks load automatically on page load via REST API.
 - **Task Creation**: Add tasks with title, optional description, priority (Low, Medium, High), and due date.
@@ -28,7 +28,7 @@ Created as part of the **Software Developer Intern Practical Assessment** for **
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```text
 task-manager/
@@ -67,7 +67,7 @@ task-manager/
 
 ---
 
-## 🚀 Setup and Installation Guide
+##  Setup and Installation Guide
 
 ### Prerequisites
 - Python 3.10+ installed on your system.
@@ -116,17 +116,17 @@ python manage.py runserver
 
 ---
 
-## 🌐 Application Access URLs
+##  Application Access URLs
 
 - **Web Application Frontend**: [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
 - **Django Admin Panel**: [http://127.0.0.1:8000/admin/](http://127.0.0.1:8000/admin/)
 - **Tasks API Endpoint**: [http://127.0.0.1:8000/api/tasks/](http://127.0.0.1:8000/api/tasks/)
 
-> 📸 **Reminder**: Capture 2–3 screenshots of the application running in your browser (e.g. main view with pending count, task creation, and filtered view) and place them in the project folder to reference here!
+>  **Reminder**: Capture 2–3 screenshots of the application running in your browser (e.g. main view with pending count, task creation, and filtered view) and place them in the project folder to reference here!
 
 ---
 
-## 🔌 API Documentation
+##  API Documentation
 
 | Method | Endpoint | Description | Request Body | Status Code |
 | :--- | :--- | :--- | :--- | :--- |
@@ -180,7 +180,7 @@ Instead of running separate Node.js or frontend development servers, Django serv
 
 ---
 
-## 🗄️ Part C: How to Execute `queries.sql`
+##  Part C: How to Execute `queries.sql`
 
 `queries.sql` contains the four assessment SQL queries written for a standalone `tasks` table with the exact sample dataset from the assessment.
 
@@ -210,7 +210,7 @@ sqlite3 sample.db < queries.sql
 
 ---
 
-## 📝 Part D — Assessment Questions & Answers
+##  Part D — Assessment Questions & Answers
 
 ### 1. How do I set up and run Part A and Part B (include the commands, for example for migrations)?
 
