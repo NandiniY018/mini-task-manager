@@ -210,20 +210,77 @@ sqlite3 sample.db < queries.sql
 
 ---
 
-## 💭 Reflections (Draft Ideas for Personal Customization)
+## 📝 Part D — Assessment Questions & Answers
 
-*(As instructed, here are 2–3 honest starter ideas for each section so you can adapt them into your own words)*
+### 1. How do I set up and run Part A and Part B (include the commands, for example for migrations)?
 
-### 1. What was the hardest part, and how did you solve it?
-- *Idea 1*: Designing clean input validation in plain Django views without DRF serializers. Solved by writing a reusable `validate_task_data()` helper that validates both creation and partial updates.
-- *Idea 2*: Keeping the pending count and table in sync after every asynchronous `fetch()` call. Solved by decoupling data fetching (`loadTasks()`) from DOM rendering (`renderTasks()`).
+To set up and run both the Backend API (Part A) and the Web Frontend (Part B):
 
-### 2. What did you learn that was new to you?
-- *Idea 1*: Structuring a unified Django project where Django directly serves both the static single-page app and the JSON API under the same domain without CORS complications.
-- *Idea 2*: Handling partial updates gracefully with the `PATCH` method using plain `json.loads(request.body)`.
+1. **Clone the repository and navigate into the folder**:
+   ```bash
+   git clone https://github.com/NandiniY018/mini-task-manager.git
+   cd mini-task-manager
+   ```
 
-### 3. If you had two more days, what would you add or improve?
-- *Idea 1*: User authentication and authorization (letting multiple users have private to-do lists).
-- *Idea 2*: Drag-and-drop task reordering and categorization with tags/labels.
-- *Idea 3*: Automated email or browser notifications for tasks approaching their due date.
+2. **Create and activate a virtual environment**:
+   - On Windows:
+     ```bash
+     python -m venv venv
+     venv\Scripts\activate
+     ```
+   - On macOS/Linux:
+     ```bash
+     python3 -m venv venv
+     source venv/bin/activate
+     ```
+
+3. **Install the required packages**:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Apply database migrations** (creates the SQLite database and tasks table):
+   ```bash
+   python manage.py makemigrations
+   python manage.py migrate
+   ```
+
+5. **(Optional) Create an admin superuser** to access the Django Admin panel:
+   ```bash
+   python manage.py createsuperuser
+   ```
+
+6. **Start the local development server**:
+   ```bash
+   python manage.py runserver
+   ```
+
+7. **Access the application**:
+   - **Web Page (Part B)**: Open your browser at [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
+   - **Backend API (Part A)**: Accessible at [http://127.0.0.1:8000/api/tasks/](http://127.0.0.1:8000/api/tasks/)
+   - **Django Admin**: Accessible at [http://127.0.0.1:8000/admin/](http://127.0.0.1:8000/admin/)
+
+---
+
+### 2. What was the hardest part, and how did you solve it?
+
+- **Handling input validation cleanly without external libraries**: Writing comprehensive validation in plain Django views (without Django REST Framework serializers) for fields like `due_date` (strict `YYYY-MM-DD` parsing), non-empty `title` (max 100 characters), and restricted `priority` choices was challenging. I solved this by building a dedicated `validate_task_data()` helper that validates both full creations (`POST`) and partial updates (`PATCH`), returning consistent HTTP 400 JSON errors.
+- **Keeping UI state and pending counts synchronized**: Ensuring that the "Pending Tasks" counter and table dynamically updated without requiring a full page refresh after every Add, Mark Done, or Delete action. I solved this by structuring the JavaScript into clean modular functions (`fetchTasks`, `renderTasks`, and `updateCounts`), where the pending count is recalculated directly from the latest task array on every render.
+
+---
+
+### 3. What did you learn that was new to you?
+
+- **Serving a Single-Page App directly from Django**: I learned how to use Django's `TemplateView` along with static files configuration so that Django serves both the REST API and the frontend HTML/CSS/JS from the exact same address (`http://127.0.0.1:8000/`), eliminating any CORS (Cross-Origin Resource Sharing) complications.
+- **Handling raw JSON requests with `PATCH`**: Working directly with `request.body` and `json.loads()` to process `PATCH` HTTP requests for partial model updates, allowing the status to be toggled to `Done` with minimal payload overhead.
+- **Event Delegation in JavaScript**: Using a single event listener on the `<tbody>` element rather than attaching listeners to each button individually, making the DOM updates cleaner and avoiding memory leaks.
+
+---
+
+### 4. If you had two more days, what would you add or improve?
+
+- **User Authentication**: Implement user registration and login so that multiple users can manage their own personal task lists securely.
+- **Task Search & Pagination**: Add a search bar to filter tasks by title or description keyword, and paginate the task table for better performance with hundreds of tasks.
+- **Overdue Task Reminders**: Add email notifications or browser alerts when a pending task's due date is within 24 hours.
+- **Drag-and-Drop Task Ordering**: Allow users to drag and reorder tasks based on personal urgency.
 
