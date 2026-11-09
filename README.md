@@ -170,7 +170,7 @@ curl -X DELETE http://127.0.0.1:8000/api/tasks/1/
 
 ---
 
-## 💡 How Django Serves the Frontend
+##  How Django Serves the Frontend
 
 Instead of running separate Node.js or frontend development servers, Django serves both the REST API and the single-page frontend on the exact same port (`http://127.0.0.1:8000/`):
 
@@ -202,7 +202,7 @@ sqlite3 sample.db < queries.sql
 
 ---
 
-## 🔍 Assumptions Made
+## Assumptions Made
 
 1. **Plain Django Views vs DRF**: Plain Django views with `JsonResponse` were deliberately chosen over Django REST Framework to keep the project lightweight, dependency-free, and easy to explain line-by-line during the interview.
 2. **CSRF Handling on API**: For simplicity of testing using `fetch()` and standard API clients without token handshakes, `@csrf_exempt` was applied to the JSON API endpoints.
